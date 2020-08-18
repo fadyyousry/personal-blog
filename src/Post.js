@@ -1,5 +1,6 @@
 import React from 'react';
 import {url} from './help';
+import marked from 'marked';
 
 class Post extends React.Component {
   constructor(props) {
@@ -25,8 +26,14 @@ class Post extends React.Component {
     })
   }
 
+  getMarkdownText(text) {
+    var rawMarkup = marked(text , {sanitize: true});
+    return { __html: rawMarkup };
+  }
+
   render() {
     let img = this.state.post.image || "https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png"
+    let text = this.state.post.text || '';
     return (
       <div >
         <header className="blog-post-header">
@@ -38,7 +45,7 @@ class Post extends React.Component {
   		    <figure className="blog-banner">
   		        <img className="img-fluid" src={img} alt="" />
   		    </figure>
-  		    <p>{this.state.post.text}</p>
+          <div dangerouslySetInnerHTML={this.getMarkdownText(text)} />
         </div>
       </div>
     );
